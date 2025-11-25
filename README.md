@@ -105,3 +105,14 @@ Choose whichever option fits your environment.
 - The CLI and bot maintain lightweight chat histories per session/chat, trimming to the last ~20 turns.
 - `SYSTEM_PROMPT` is optional but recommended to keep Claude focused on MCP Finance workflows.
 - The Telegram bot can be restricted to specific user IDs via `TELEGRAM_ALLOWED_USER_IDS`.
+
+## ☕ Support the Project
+
+If you enjoy using **mcp-client-finance-intel** and want to help me keep building,  
+you can support me here:
+
+<a href="https://buymeacoffee.com/fpcsa" target="_blank">
+  <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" width="180" />
+</a>
+
+👉 [Buy Me a Coffee](https://buymeacoffee.com/fpcsa)
