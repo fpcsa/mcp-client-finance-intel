@@ -11,6 +11,7 @@ from aiogram import Bot, Dispatcher, types
 from aiogram.filters import CommandStart
 from aiogram.enums import ParseMode
 from aiogram.client.default import DefaultBotProperties
+from aiogram.exceptions import TelegramBadRequest
 
 from anthropic import Anthropic
 
@@ -185,6 +186,21 @@ anthropic_client = Anthropic(api_key=ANTHROPIC_API_KEY)
 histories: Dict[int, List[Dict[str, Any]]] = {}
 
 
+async def _safe_markdown_reply(message: types.Message, text: str) -> types.Message:
+    """
+    Send replies using the bot's Markdown parse mode, but gracefully fall back to plain text
+    when Telegram rejects the content (e.g., unbalanced formatting from Claude).
+    """
+    try:
+        return await message.reply(text)
+    except TelegramBadRequest as exc:
+        details = str(exc).lower()
+        if "can't parse entities" not in details:
+            raise
+        logger.warning("Telegram refused Markdown content, resending as plain text: %s", exc)
+        return await message.reply(text, parse_mode=None)
+
+
 async def ask_claude_with_mcp(chat_id: int, user_text: str) -> str:
     """
     1) Send user message + MCP tools to Claude.
@@ -343,9 +359,10 @@ async def text_handler(message: types.Message):
 
     try:
         answer = await ask_claude_with_mcp(chat_id, user_text)
-        await message.reply(answer)
+        await _safe_markdown_reply(message, answer)
     except Exception as e:
-        await message.reply(f"Sorry, something went wrong:\n`{repr(e)}`")
+        logger.exception("Failed to create response for chat_id=%s", chat_id)
+        await _safe_markdown_reply(message, f"Sorry, something went wrong:\n`{repr(e)}`")
 
 
 async def main():
