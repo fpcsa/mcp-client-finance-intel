@@ -2,3 +2,6 @@ aiogram
 anthropic 
 fastmcp 
 python-dotenv
+langchain
+langchain-mcp-adapters
+langchain-nvidia-ai-endpoints

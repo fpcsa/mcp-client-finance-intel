@@ -35,12 +35,13 @@ MCP_SERVER_URL = _get_env("MCP_SERVER_URL")
 
 
 # -------------------------------------------------------
-# 1. LLM: via NVIDIA NIM
+# 1. LLM: via Langchain & NVIDIA NIM
 # -------------------------------------------------------
 
 llm = ChatNVIDIA(
     # model="deepseek-ai/deepseek-v3.1-terminus",  # NIM model id 
-    model="qwen/qwen3-next-80b-a3b-thinking",
+    # model="qwen/qwen3-next-80b-a3b-thinking",
+    model="qwen/qwen3-235b-a22b",
     api_key=NVIDIA_API_KEY,
     temperature=0.2,
     #top_p=0.7,
@@ -196,3 +197,5 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+
+# TODO integrate this into main_oss to build a telegram bot that will be named bot_oss.py which uses the OSS model like above instead of Claude
