@@ -6,8 +6,8 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy files used into docker local dir
-COPY prompts.py bot_oss.py ./
+# Copy only the bot entrypoint (and any runtime resources it imports)
+COPY bot.py .
 
 # Default command runs the Telegram bot
-CMD ["python", "bot_oss.py"]
+CMD ["python", "bot.py"]
